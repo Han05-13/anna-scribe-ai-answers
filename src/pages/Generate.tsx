@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Loader2, Send, Copy, RefreshCw, Clock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
@@ -289,13 +290,15 @@ Answer:`;
                   )}
                 </div>
                 
-                <div className="min-h-[300px] sm:min-h-[400px] p-3 sm:p-4 bg-gray-50 rounded-lg border">
+                <div className="h-[300px] sm:h-[400px] p-3 sm:p-4 bg-gray-50 rounded-lg border">
                   {answer ? (
-                    <div className="prose prose-sm max-w-none">
-                      <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify text-sm sm:text-base">
-                        {formatText(answer)}
+                    <ScrollArea className="h-full w-full">
+                      <div className="prose prose-sm max-w-none pr-4">
+                        <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify text-sm sm:text-base">
+                          {formatText(answer)}
+                        </div>
                       </div>
-                    </div>
+                    </ScrollArea>
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">
                       <div className="text-center px-4">
