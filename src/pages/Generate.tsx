@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -172,6 +171,20 @@ Answer:`;
     setMarkType("");
   };
 
+  // Function to format text with bold markers
+  const formatText = (text: string) => {
+    return text.split(/(\*\*[^*]+\*\*)/).map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return (
+          <strong key={index} className="font-semibold text-gray-900">
+            {part.slice(2, -2)}
+          </strong>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <Header />
@@ -271,9 +284,9 @@ Answer:`;
                 <div className="min-h-[400px] p-4 bg-gray-50 rounded-lg border">
                   {answer ? (
                     <div className="prose prose-sm max-w-none">
-                      <pre className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed">
-                        {answer}
-                      </pre>
+                      <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify">
+                        {formatText(answer)}
+                      </div>
                     </div>
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">
