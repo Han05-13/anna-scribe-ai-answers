@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -8,6 +8,23 @@ import { Loader2, Send, Copy, RefreshCw, Clock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 
+// Rate limiting configuration
+const RATE_LIMITS = {
+  REQUESTS_PER_MINUTE: 28,
+  TOKENS_PER_MINUTE: 60000,
+  REQUESTS_PER_DAY: 1400,
+  COOLDOWN_SECONDS: 15
+};
+
+interface RateLimitState {
+  requestsThisMinute: number;
+  tokensThisMinute: number;
+  requestsToday: number;
+  lastMinuteReset: number;
+  lastDayReset: number;
+  cooldownUntil: number;
+}
+
 const Generate = () => {
   const [question, setQuestion] = useState("");
   const [markType, setMarkType] = useState("");
@@ -15,8 +32,141 @@ const Generate = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [cooldownSeconds, setCooldownSeconds] = useState(0);
 
+  // Rate limiting state
+  const [rateLimitState, setRateLimitState] = useState<RateLimitState>(() => {
+    const stored = localStorage.getItem('apiRateLimit');
+    const now = Date.now();
+    
+    if (stored) {
+      const parsed = JSON.parse(stored);
+      // Reset counters if time periods have passed
+      const minutesPassed = Math.floor((now - parsed.lastMinuteReset) / 60000);
+      const daysPassed = Math.floor((now - parsed.lastDayReset) / 86400000);
+      
+      return {
+        requestsThisMinute: minutesPassed > 0 ? 0 : parsed.requestsThisMinute,
+        tokensThisMinute: minutesPassed > 0 ? 0 : parsed.tokensThisMinute,
+        requestsToday: daysPassed > 0 ? 0 : parsed.requestsToday,
+        lastMinuteReset: minutesPassed > 0 ? now : parsed.lastMinuteReset,
+        lastDayReset: daysPassed > 0 ? now : parsed.lastDayReset,
+        cooldownUntil: parsed.cooldownUntil || 0
+      };
+    }
+    
+    return {
+      requestsThisMinute: 0,
+      tokensThisMinute: 0,
+      requestsToday: 0,
+      lastMinuteReset: now,
+      lastDayReset: now,
+      cooldownUntil: 0
+    };
+  });
+
   // Use the provided API key directly
   const apiKey = "AIzaSyDkbEjn21-DvyI795K4fR1N5irLt1Is2H0";
+
+  // Update localStorage whenever rate limit state changes
+  useEffect(() => {
+    localStorage.setItem('apiRateLimit', JSON.stringify(rateLimitState));
+  }, [rateLimitState]);
+
+  // Handle cooldown timer
+  useEffect(() => {
+    if (cooldownSeconds > 0) {
+      const timer = setInterval(() => {
+        setCooldownSeconds((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [cooldownSeconds]);
+
+  const checkRateLimit = (): boolean => {
+    const now = Date.now();
+    
+    // Check if still in cooldown
+    if (now < rateLimitState.cooldownUntil) {
+      const remainingCooldown = Math.ceil((rateLimitState.cooldownUntil - now) / 1000);
+      setCooldownSeconds(remainingCooldown);
+      toast({
+        title: "Rate Limited",
+        description: `Please wait ${remainingCooldown} seconds before making another request`,
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    // Reset counters if time periods have passed
+    const minutesPassed = Math.floor((now - rateLimitState.lastMinuteReset) / 60000);
+    const daysPassed = Math.floor((now - rateLimitState.lastDayReset) / 86400000);
+    
+    let newState = { ...rateLimitState };
+    
+    if (minutesPassed > 0) {
+      newState.requestsThisMinute = 0;
+      newState.tokensThisMinute = 0;
+      newState.lastMinuteReset = now;
+    }
+    
+    if (daysPassed > 0) {
+      newState.requestsToday = 0;
+      newState.lastDayReset = now;
+    }
+
+    // Check limits
+    if (newState.requestsThisMinute >= RATE_LIMITS.REQUESTS_PER_MINUTE) {
+      newState.cooldownUntil = now + (RATE_LIMITS.COOLDOWN_SECONDS * 1000);
+      setRateLimitState(newState);
+      setCooldownSeconds(RATE_LIMITS.COOLDOWN_SECONDS);
+      toast({
+        title: "Rate Limited",
+        description: `Exceeded ${RATE_LIMITS.REQUESTS_PER_MINUTE} requests per minute. Please wait ${RATE_LIMITS.COOLDOWN_SECONDS} seconds.`,
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (newState.tokensThisMinute >= RATE_LIMITS.TOKENS_PER_MINUTE) {
+      newState.cooldownUntil = now + (RATE_LIMITS.COOLDOWN_SECONDS * 1000);
+      setRateLimitState(newState);
+      setCooldownSeconds(RATE_LIMITS.COOLDOWN_SECONDS);
+      toast({
+        title: "Rate Limited",
+        description: `Exceeded ${RATE_LIMITS.TOKENS_PER_MINUTE} tokens per minute. Please wait ${RATE_LIMITS.COOLDOWN_SECONDS} seconds.`,
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    if (newState.requestsToday >= RATE_LIMITS.REQUESTS_PER_DAY) {
+      newState.cooldownUntil = now + (RATE_LIMITS.COOLDOWN_SECONDS * 1000);
+      setRateLimitState(newState);
+      setCooldownSeconds(RATE_LIMITS.COOLDOWN_SECONDS);
+      toast({
+        title: "Daily Limit Reached",
+        description: `Exceeded ${RATE_LIMITS.REQUESTS_PER_DAY} requests per day. Please wait ${RATE_LIMITS.COOLDOWN_SECONDS} seconds.`,
+        variant: "destructive",
+      });
+      return false;
+    }
+
+    return true;
+  };
+
+  const updateRateLimit = (tokensUsed: number) => {
+    setRateLimitState(prev => ({
+      ...prev,
+      requestsThisMinute: prev.requestsThisMinute + 1,
+      tokensThisMinute: prev.tokensThisMinute + tokensUsed,
+      requestsToday: prev.requestsToday + 1
+    }));
+  };
 
   const generateAnswer = async () => {
     if (!question.trim()) {
@@ -43,6 +193,11 @@ const Generate = () => {
         description: `Please wait ${cooldownSeconds} seconds before generating another answer`,
         variant: "destructive",
       });
+      return;
+    }
+
+    // Check rate limits before making request
+    if (!checkRateLimit()) {
       return;
     }
 
@@ -78,19 +233,11 @@ const Generate = () => {
       const data = await response.json();
       const generatedAnswer = data.candidates[0].content.parts[0].text;
       
-      setAnswer(generatedAnswer);
+      // Update rate limiting with actual tokens used
+      const tokensUsed = data.usageMetadata?.totalTokenCount || 1000; // Fallback estimate
+      updateRateLimit(tokensUsed);
       
-      // Start cooldown timer
-      setCooldownSeconds(10);
-      const timer = setInterval(() => {
-        setCooldownSeconds((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
+      setAnswer(generatedAnswer);
       
       toast({
         title: "Success",
@@ -207,6 +354,11 @@ Answer:`;
             <p className="text-base sm:text-lg text-gray-600 px-4">
               Generate perfect answers for Anna University questions
             </p>
+            {/* Rate limit status */}
+            <div className="mt-2 text-xs text-gray-500">
+              Requests today: {rateLimitState.requestsToday}/{RATE_LIMITS.REQUESTS_PER_DAY} | 
+              This minute: {rateLimitState.requestsThisMinute}/{RATE_LIMITS.REQUESTS_PER_MINUTE}
+            </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
