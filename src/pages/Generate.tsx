@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Loader2, Send, Copy, RefreshCw } from "lucide-react";
+import { Loader2, Send, Copy, RefreshCw, Clock } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 
@@ -13,7 +13,10 @@ const Generate = () => {
   const [markType, setMarkType] = useState("");
   const [answer, setAnswer] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey, setApiKey] = useState("");
+  const [cooldownSeconds, setCooldownSeconds] = useState(0);
+
+  // Use the provided API key directly
+  const apiKey = "AIzaSyDkbEjn21-DvyI795K4fR1N5irLt1Is2H0";
 
   const generateAnswer = async () => {
     if (!question.trim()) {
@@ -34,10 +37,10 @@ const Generate = () => {
       return;
     }
 
-    if (!apiKey.trim()) {
+    if (cooldownSeconds > 0) {
       toast({
-        title: "Error",
-        description: "Please enter your Gemini API key",
+        title: "Please wait",
+        description: `Please wait ${cooldownSeconds} seconds before generating another answer`,
         variant: "destructive",
       });
       return;
@@ -77,6 +80,18 @@ const Generate = () => {
       
       setAnswer(generatedAnswer);
       
+      // Start cooldown timer
+      setCooldownSeconds(10);
+      const timer = setInterval(() => {
+        setCooldownSeconds((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      
       toast({
         title: "Success",
         description: "Answer generated successfully!",
@@ -85,7 +100,7 @@ const Generate = () => {
       console.error('Error generating answer:', error);
       toast({
         title: "Error",
-        description: "Failed to generate answer. Please check your API key and try again.",
+        description: "Failed to generate answer. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -181,22 +196,6 @@ Answer:`;
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Gemini API Key
-                    </label>
-                    <Textarea
-                      placeholder="Enter your Gemini API key here..."
-                      value={apiKey}
-                      onChange={(e) => setApiKey(e.target.value)}
-                      className="min-h-[60px] resize-none"
-                      type="password"
-                    />
-                    <p className="text-xs text-gray-500 mt-1">
-                      Get your API key from Google AI Studio
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
                       Question Type
                     </label>
                     <Select value={markType} onValueChange={setMarkType}>
@@ -226,13 +225,18 @@ Answer:`;
                   <div className="flex space-x-3">
                     <Button 
                       onClick={generateAnswer}
-                      disabled={isLoading}
+                      disabled={isLoading || cooldownSeconds > 0}
                       className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
                     >
                       {isLoading ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                           Generating...
+                        </>
+                      ) : cooldownSeconds > 0 ? (
+                        <>
+                          <Clock className="mr-2 h-4 w-4" />
+                          Wait {cooldownSeconds}s
                         </>
                       ) : (
                         <>

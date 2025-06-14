@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, BookOpen, Lightbulb, GraduationCap, Star, Users, Trophy } from "lucide-react";
@@ -42,10 +41,12 @@ const Index = () => {
               </Button>
             </Link>
             
-            <Button variant="outline" size="lg" className="px-8 py-4 text-lg border-2 hover:bg-blue-50 transform hover:scale-105 transition-all duration-200">
-              <BookOpen className="mr-2 h-5 w-5" />
-              Learn More
-            </Button>
+            <Link to="/about">
+              <Button variant="outline" size="lg" className="px-8 py-4 text-lg border-2 hover:bg-blue-50 transform hover:scale-105 transition-all duration-200">
+                <BookOpen className="mr-2 h-5 w-5" />
+                Learn More
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
