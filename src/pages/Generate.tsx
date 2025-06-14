@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -189,22 +190,22 @@ Answer:`;
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <Header />
       
-      <div className="pt-24 pb-12 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+      <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-6 sm:mb-8">
+            <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
               Answer Generator
             </h1>
-            <p className="text-lg text-gray-600">
+            <p className="text-base sm:text-lg text-gray-600 px-4">
               Generate perfect answers for Anna University questions
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-8">
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
             {/* Input Section */}
-            <Card className="p-6 shadow-lg border-0 bg-white">
+            <Card className="p-4 sm:p-6 shadow-lg border-0 bg-white order-2 lg:order-1">
               <CardContent className="p-0">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-900">Question Input</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-900">Question Input</h2>
                 
                 <div className="space-y-4">
                   <div>
@@ -212,7 +213,7 @@ Answer:`;
                       Question Type
                     </label>
                     <Select value={markType} onValueChange={setMarkType}>
-                      <SelectTrigger>
+                      <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select question type" />
                       </SelectTrigger>
                       <SelectContent>
@@ -231,11 +232,11 @@ Answer:`;
                       placeholder="Enter your Anna University question here..."
                       value={question}
                       onChange={(e) => setQuestion(e.target.value)}
-                      className="min-h-[120px]"
+                      className="min-h-[100px] sm:min-h-[120px] w-full"
                     />
                   </div>
 
-                  <div className="flex space-x-3">
+                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
                     <Button 
                       onClick={generateAnswer}
                       disabled={isLoading || cooldownSeconds > 0}
@@ -259,7 +260,7 @@ Answer:`;
                       )}
                     </Button>
                     
-                    <Button variant="outline" onClick={clearAll}>
+                    <Button variant="outline" onClick={clearAll} className="sm:w-auto">
                       <RefreshCw className="mr-2 h-4 w-4" />
                       Clear
                     </Button>
@@ -269,30 +270,30 @@ Answer:`;
             </Card>
 
             {/* Answer Section */}
-            <Card className="p-6 shadow-lg border-0 bg-white">
+            <Card className="p-4 sm:p-6 shadow-lg border-0 bg-white order-1 lg:order-2">
               <CardContent className="p-0">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-2xl font-semibold text-gray-900">Generated Answer</h2>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
+                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Generated Answer</h2>
                   {answer && (
-                    <Button variant="outline" size="sm" onClick={copyToClipboard}>
+                    <Button variant="outline" size="sm" onClick={copyToClipboard} className="self-start sm:self-auto">
                       <Copy className="mr-2 h-4 w-4" />
                       Copy
                     </Button>
                   )}
                 </div>
                 
-                <div className="min-h-[400px] p-4 bg-gray-50 rounded-lg border">
+                <div className="min-h-[300px] sm:min-h-[400px] p-3 sm:p-4 bg-gray-50 rounded-lg border">
                   {answer ? (
                     <div className="prose prose-sm max-w-none">
-                      <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify">
+                      <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify text-sm sm:text-base">
                         {formatText(answer)}
                       </div>
                     </div>
                   ) : (
                     <div className="flex items-center justify-center h-full text-gray-400">
-                      <div className="text-center">
-                        <Send className="h-12 w-12 mx-auto mb-4 opacity-50" />
-                        <p>Your generated answer will appear here</p>
+                      <div className="text-center px-4">
+                        <Send className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 opacity-50" />
+                        <p className="text-sm sm:text-base">Your generated answer will appear here</p>
                       </div>
                     </div>
                   )}
