@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -109,7 +108,7 @@ const Generate = () => {
   };
 
   const generatePrompt = (question: string, markType: string) => {
-    const basePrompt = `You are an expert assistant for Anna University students. Generate a comprehensive answer for the following question in the ${markType} format:
+    const basePrompt = `You are an expert assistant for Anna University students. Generate a comprehensive, well-structured answer with key insights and essential points for the following question in the ${markType} format:
 
 Question: ${question}
 
@@ -118,43 +117,51 @@ Question: ${question}
     switch (markType) {
       case "2-mark":
         return basePrompt + `
-Please provide a concise answer suitable for a 2-mark question:
-- Maximum 2-3 sentences
-- Direct and to the point
-- Include key terms and definitions
-- Format as a brief explanation
+Please provide a concise answer suitable for a 2-mark question with these requirements:
+- **Key Insights**: Focus on the most critical 1-2 concepts
+- **Essential Points**: Maximum 2-3 sentences with precise definitions
+- **Format**: Direct, to-the-point explanation
+- **Content**: Include key terms, definitions, and core concepts
+- **Structure**: Brief but complete answer that covers the question fully
+
+Ensure the answer contains the most important information a student needs to score full marks.
 
 Answer:`;
 
       case "13-mark":
         return basePrompt + `
-Please provide a detailed answer suitable for a 13-mark question:
-- Include introduction, main content, and conclusion
-- Use proper headings and subheadings
-- Include examples where relevant
-- Explain concepts step by step
-- Add diagrams suggestions if applicable
-- Maintain Anna University exam standards
+Please provide a detailed answer suitable for a 13-mark question with these requirements:
+- **Key Insights**: Identify and explain 4-5 major concepts or points
+- **Essential Points**: Include introduction, main content with subheadings, and conclusion
+- **Structure**: Use proper headings, bullet points, and clear organization
+- **Content**: Step-by-step explanations, relevant examples, and practical applications
+- **Critical Elements**: Include advantages, disadvantages, and real-world relevance
+- **Visual Aids**: Suggest diagrams or flowcharts where applicable
+- **Anna University Standards**: Follow exam pattern and marking scheme
+
+Focus on providing comprehensive coverage while highlighting the most important aspects that examiners look for.
 
 Answer:`;
 
       case "15-mark":
         return basePrompt + `
-Please provide a comprehensive answer suitable for a 15-mark question:
-- Detailed introduction with context
-- Multiple sections with clear headings
-- In-depth explanations with examples
-- Include advantages, disadvantages, applications
-- Add mathematical formulations if relevant
-- Suggest diagrams and flowcharts where needed
-- Include case studies or real-world examples
-- Proper conclusion summarizing key points
-- Follow Anna University exam pattern and standards
+Please provide a comprehensive answer suitable for a 15-mark question with these requirements:
+- **Key Insights**: Develop 6-8 major concepts with deep analysis
+- **Essential Points**: Detailed introduction, multiple well-structured sections, comprehensive conclusion
+- **Structure**: Clear headings, subheadings, numbered points, and logical flow
+- **Content**: In-depth explanations, multiple examples, case studies, and comparative analysis
+- **Critical Analysis**: Include advantages, disadvantages, applications, limitations, and future scope
+- **Technical Details**: Mathematical formulations, algorithms, or technical specifications where relevant
+- **Visual Elements**: Suggest multiple diagrams, flowcharts, tables, or graphs
+- **Real-world Application**: Include industry examples, current trends, and practical implementations
+- **Conclusion**: Summarize key takeaways and important points for easy revision
+
+Provide university-level depth while ensuring all critical points are covered for maximum marks.
 
 Answer:`;
 
       default:
-        return basePrompt + "Please provide an appropriate answer for this question.";
+        return basePrompt + "Please provide an appropriate answer with key insights and essential points for this question.";
     }
   };
 
