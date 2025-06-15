@@ -5,14 +5,14 @@ import { GraduationCap, Target, Users, Lightbulb, Award, BookOpen, Zap } from "l
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-violet-50">
       <Header />
       
       {/* Mobile Ad Section - Top */}
       <div className="block md:hidden bg-gray-100 border-y border-gray-200 py-2 px-4">
         <div className="bg-white rounded-lg p-3 text-center shadow-sm">
           <p className="text-xs text-gray-500 mb-1">Advertisement</p>
-          <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-4 rounded">
+          <div className="bg-gradient-to-r from-purple-100 to-violet-100 p-4 rounded">
             <p className="text-sm font-medium text-gray-700">Mobile Ad Space</p>
             <p className="text-xs text-gray-500">320x100 Banner</p>
           </div>
@@ -22,7 +22,7 @@ const About = () => {
       {/* Hero Section */}
       <section className="pt-16 md:pt-24 pb-8 md:pb-12 px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4 md:mb-6 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-4 md:mb-6 leading-tight">
             About StuBud AI
           </h1>
           <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 leading-relaxed px-2">
@@ -36,7 +36,7 @@ const About = () => {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 lg:p-12 shadow-lg mb-6 md:mb-8">
             <div className="flex items-center mb-4 md:mb-6">
-              <Target className="h-6 w-6 md:h-8 md:w-8 text-blue-600 mr-2 md:mr-3" />
+              <Target className="h-6 w-6 md:h-8 md:w-8 text-purple-600 mr-2 md:mr-3" />
               <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold">Our Mission</h2>
             </div>
             <p className="text-gray-600 leading-relaxed mb-4 md:mb-6 text-sm sm:text-base md:text-lg">
@@ -57,7 +57,7 @@ const About = () => {
       <div className="block md:hidden bg-white border-y border-gray-200 py-3 px-4 mb-6">
         <div className="text-center">
           <p className="text-xs text-gray-500 mb-2">Advertisement</p>
-          <div className="bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-lg">
+          <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-6 rounded-lg">
             <p className="text-sm font-medium text-gray-700">Mobile Ad Space</p>
             <p className="text-xs text-gray-500">320x250 Medium Rectangle</p>
           </div>
@@ -85,7 +85,7 @@ const About = () => {
 
             <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-lg">
               <div className="flex items-center mb-4 md:mb-6">
-                <Lightbulb className="h-6 w-6 md:h-8 md:w-8 text-indigo-600 mr-2 md:mr-3" />
+                <Lightbulb className="h-6 w-6 md:h-8 md:w-8 text-violet-600 mr-2 md:mr-3" />
                 <h3 className="text-lg sm:text-xl md:text-2xl font-semibold">AI Technology</h3>
               </div>
               <p className="text-gray-600 leading-relaxed text-sm sm:text-base md:text-lg">
@@ -103,12 +103,12 @@ const About = () => {
         <div className="max-w-4xl mx-auto">
           <div className="bg-white rounded-2xl p-4 sm:p-6 md:p-8 lg:p-12 shadow-lg mb-6 md:mb-8">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-6 md:mb-8 flex items-center">
-              <GraduationCap className="h-6 w-6 md:h-8 md:w-8 text-blue-600 mr-2 md:mr-3" />
+              <GraduationCap className="h-6 w-6 md:h-8 md:w-8 text-purple-600 mr-2 md:mr-3" />
               What We Offer
             </h2>
             <div className="space-y-6 md:space-y-8">
-              <div className="border-l-4 border-blue-500 pl-4 md:pl-6">
-                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-blue-600 mb-2 md:mb-3 flex items-center">
+              <div className="border-l-4 border-purple-500 pl-4 md:pl-6">
+                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-purple-600 mb-2 md:mb-3 flex items-center">
                   <Award className="h-4 w-4 md:h-5 md:w-5 mr-1 md:mr-2" />
                   2-Mark Questions
                 </h3>
@@ -116,8 +116,8 @@ const About = () => {
                   Concise, precise answers perfect for short-answer questions with key concepts clearly highlighted.
                 </p>
               </div>
-              <div className="border-l-4 border-purple-500 pl-4 md:pl-6">
-                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-purple-600 mb-2 md:mb-3 flex items-center">
+              <div className="border-l-4 border-violet-500 pl-4 md:pl-6">
+                <h3 className="text-base sm:text-lg md:text-xl font-semibold text-violet-600 mb-2 md:mb-3 flex items-center">
                   <BookOpen className="h-4 w-4 md:h-5 md:w-5 mr-1 md:mr-2" />
                   13-Mark Questions
                 </h3>
@@ -143,7 +143,7 @@ const About = () => {
       <div className="block md:hidden bg-gray-50 border-y border-gray-200 py-3 px-4 mb-6">
         <div className="text-center">
           <p className="text-xs text-gray-500 mb-2">Advertisement</p>
-          <div className="bg-gradient-to-r from-yellow-100 to-orange-100 p-4 rounded-lg">
+          <div className="bg-gradient-to-r from-purple-100 to-blue-100 p-4 rounded-lg">
             <p className="text-sm font-medium text-gray-700">Mobile Ad Space</p>
             <p className="text-xs text-gray-500">320x100 Banner</p>
           </div>
@@ -151,7 +151,7 @@ const About = () => {
       </div>
 
       {/* Commitment Section */}
-      <section className="py-8 md:py-12 px-3 sm:px-4 md:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-indigo-600">
+      <section className="py-8 md:py-12 px-3 sm:px-4 md:px-6 lg:px-8 bg-gradient-to-r from-purple-600 to-violet-600">
         <div className="max-w-4xl mx-auto">
           <div className="text-center text-white">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold mb-4 md:mb-6">Our Commitment</h2>
