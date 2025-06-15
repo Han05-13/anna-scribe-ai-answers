@@ -207,6 +207,16 @@ const Generate = () => {
     try {
       const prompt = generatePrompt(question, markType);
       
+      // Set maxOutputTokens based on mark type
+      let maxTokens = 1024;
+      if (markType === "15-mark") {
+        maxTokens = 1500;
+      } else if (markType === "13-mark") {
+        maxTokens = 1200;
+      } else if (markType === "2-mark") {
+        maxTokens = 300;
+      }
+      
       const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=' + apiKey, {
         method: 'POST',
         headers: {
@@ -222,7 +232,7 @@ const Generate = () => {
             temperature: 0.7,
             topK: 40,
             topP: 0.95,
-            maxOutputTokens: 2048,
+            maxOutputTokens: maxTokens,
           }
         }),
       });
@@ -357,59 +367,70 @@ Answer:`;
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <Header />
       
+      {/* Mobile Ad Section - Top */}
+      <div className="block md:hidden bg-gray-100 border-y border-gray-200 py-2 px-4">
+        <div className="bg-white rounded-lg p-3 text-center shadow-sm">
+          <p className="text-xs text-gray-500 mb-1">Advertisement</p>
+          <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-4 rounded">
+            <p className="text-sm font-medium text-gray-700">Mobile Ad Space</p>
+            <p className="text-xs text-gray-500">320x100 Banner</p>
+          </div>
+        </div>
+      </div>
+      
       {/* Hero Section */}
-      <section className="pt-24 pb-8 px-4 sm:px-6 lg:px-8">
+      <section className="pt-16 md:pt-24 pb-6 md:pb-8 px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3 md:mb-4 leading-tight">
             AI Answer Generator
           </h1>
-          <p className="text-base sm:text-lg lg:text-xl text-gray-600 px-4 max-w-3xl mx-auto">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 px-2 md:px-4 max-w-3xl mx-auto leading-relaxed">
             Generate perfect, well-structured answers for Anna University questions with AI-powered insights
           </p>
           
           {/* Enhanced Rate limit status */}
-          <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-gray-500">
-            <div className="bg-white px-3 py-1 rounded-full shadow-sm">
-              <Target className="inline w-4 h-4 mr-1" />
+          <div className="mt-3 md:mt-4 flex flex-wrap justify-center gap-2 md:gap-4 text-xs text-gray-500">
+            <div className="bg-white px-2 py-1 rounded-full shadow-sm border">
+              <Target className="inline w-3 h-3 mr-1" />
               Daily: {rateLimitState.requestsToday}/{RATE_LIMITS.REQUESTS_PER_DAY}
             </div>
-            <div className="bg-white px-3 py-1 rounded-full shadow-sm">
-              Per minute: {rateLimitState.requestsThisMinute}/{RATE_LIMITS.REQUESTS_PER_MINUTE}
+            <div className="bg-white px-2 py-1 rounded-full shadow-sm border">
+              Per min: {rateLimitState.requestsThisMinute}/{RATE_LIMITS.REQUESTS_PER_MINUTE}
             </div>
-            <div className="bg-white px-3 py-1 rounded-full shadow-sm">
-              Tokens today: {rateLimitState.tokensThisMinute.toLocaleString()}/80,000
+            <div className="bg-white px-2 py-1 rounded-full shadow-sm border">
+              Tokens: {rateLimitState.tokensThisMinute.toLocaleString()}/80K
             </div>
           </div>
         </div>
       </section>
 
       {/* Main Content Section */}
-      <section className="pb-12 px-4 sm:px-6 lg:px-8">
+      <section className="pb-8 md:pb-12 px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
+          <div className="grid lg:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
             
             {/* Input Section */}
             <div className="order-2 lg:order-1">
-              <Card className="p-4 sm:p-6 shadow-lg border-0 bg-white">
+              <Card className="p-3 sm:p-4 md:p-6 shadow-lg border-0 bg-white">
                 <CardContent className="p-0">
-                  <div className="flex items-center mb-4 sm:mb-6">
-                    <Send className="h-6 w-6 text-blue-600 mr-2" />
-                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Question Input</h2>
+                  <div className="flex items-center mb-3 md:mb-6">
+                    <Send className="h-5 w-5 md:h-6 md:w-6 text-blue-600 mr-2" />
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">Question Input</h2>
                   </div>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-3 md:space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         Question Type
                       </label>
                       <Select value={markType} onValueChange={setMarkType}>
-                        <SelectTrigger className="w-full h-12">
+                        <SelectTrigger className="w-full h-10 md:h-12">
                           <SelectValue placeholder="Select question type" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="2-mark">2 Marks - Quick Answer</SelectItem>
                           <SelectItem value="13-mark">13 Marks - Detailed</SelectItem>
-                          <SelectItem value="15-mark">15 Marks - Comprehensive</SelectItem>
+                          <SelectItem value="15-mark">15 Marks - Comprehensive (1500 tokens)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -422,36 +443,36 @@ Answer:`;
                         placeholder="Enter your Anna University question here..."
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        className="min-h-[120px] sm:min-h-[140px] w-full text-base"
+                        className="min-h-[100px] sm:min-h-[120px] md:min-h-[140px] w-full text-sm md:text-base"
                       />
                     </div>
 
-                    <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                    <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
                       <Button 
                         onClick={generateAnswer}
                         disabled={isLoading || cooldownSeconds > 0}
-                        className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-base"
+                        className="flex-1 h-10 md:h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-sm md:text-base"
                       >
                         {isLoading ? (
                           <>
-                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            <Loader2 className="mr-2 h-4 w-4 md:h-5 md:w-5 animate-spin" />
                             Generating...
                           </>
                         ) : cooldownSeconds > 0 ? (
                           <>
-                            <Clock className="mr-2 h-5 w-5" />
+                            <Clock className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                             Wait {cooldownSeconds}s
                           </>
                         ) : (
                           <>
-                            <Send className="mr-2 h-5 w-5" />
+                            <Send className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                             Generate Answer
                           </>
                         )}
                       </Button>
                       
-                      <Button variant="outline" onClick={clearAll} className="sm:w-auto h-12">
-                        <RefreshCw className="mr-2 h-5 w-5" />
+                      <Button variant="outline" onClick={clearAll} className="sm:w-auto h-10 md:h-12 text-sm md:text-base">
+                        <RefreshCw className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                         Clear
                       </Button>
                     </div>
@@ -462,36 +483,36 @@ Answer:`;
 
             {/* Answer Section */}
             <div className="order-1 lg:order-2">
-              <Card className="p-4 sm:p-6 shadow-lg border-0 bg-white">
+              <Card className="p-3 sm:p-4 md:p-6 shadow-lg border-0 bg-white">
                 <CardContent className="p-0">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 md:mb-6 space-y-2 sm:space-y-0">
                     <div className="flex items-center">
-                      <Target className="h-6 w-6 text-green-600 mr-2" />
-                      <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Generated Answer</h2>
+                      <Target className="h-5 w-5 md:h-6 md:w-6 text-green-600 mr-2" />
+                      <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">Generated Answer</h2>
                     </div>
                     {answer && (
-                      <Button variant="outline" size="sm" onClick={copyToClipboard} className="self-start sm:self-auto">
-                        <Copy className="mr-2 h-4 w-4" />
+                      <Button variant="outline" size="sm" onClick={copyToClipboard} className="self-start sm:self-auto text-xs md:text-sm">
+                        <Copy className="mr-2 h-3 w-3 md:h-4 md:w-4" />
                         Copy
                       </Button>
                     )}
                   </div>
                   
-                  <div className="h-[350px] sm:h-[450px] p-4 sm:p-6 bg-gray-50 rounded-lg border">
+                  <div className="h-[300px] sm:h-[350px] md:h-[450px] p-3 sm:p-4 md:p-6 bg-gray-50 rounded-lg border">
                     {answer ? (
                       <ScrollArea className="h-full w-full">
-                        <div className="prose prose-sm max-w-none pr-4">
-                          <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify text-sm sm:text-base">
+                        <div className="prose prose-sm max-w-none pr-2 md:pr-4">
+                          <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify text-xs sm:text-sm md:text-base">
                             {formatText(answer)}
                           </div>
                         </div>
                       </ScrollArea>
                     ) : (
                       <div className="flex items-center justify-center h-full text-gray-400">
-                        <div className="text-center px-4">
-                          <Target className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 opacity-50" />
-                          <p className="text-sm sm:text-base font-medium mb-2">Your AI-generated answer will appear here</p>
-                          <p className="text-xs sm:text-sm">Complete with key insights and important points highlighted</p>
+                        <div className="text-center px-2 md:px-4">
+                          <Target className="h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 mx-auto mb-3 md:mb-4 opacity-50" />
+                          <p className="text-xs sm:text-sm md:text-base font-medium mb-2">Your AI-generated answer will appear here</p>
+                          <p className="text-xs text-gray-500">Complete with key insights and important points highlighted</p>
                         </div>
                       </div>
                     )}
@@ -503,31 +524,53 @@ Answer:`;
         </div>
       </section>
 
+      {/* Mobile Ad Section - Middle */}
+      <div className="block md:hidden bg-white border-y border-gray-200 py-3 px-4 mb-6">
+        <div className="text-center">
+          <p className="text-xs text-gray-500 mb-2">Advertisement</p>
+          <div className="bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-lg">
+            <p className="text-sm font-medium text-gray-700">Mobile Ad Space</p>
+            <p className="text-xs text-gray-500">320x250 Medium Rectangle</p>
+          </div>
+        </div>
+      </div>
+
       {/* Features Section */}
-      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white/50">
+      <section className="py-8 md:py-12 px-3 sm:px-4 md:px-6 lg:px-8 bg-white/50">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-gray-900 mb-6 md:mb-8">
             Why Choose Our AI Generator?
           </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <Key className="h-10 w-10 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Key Insights</h3>
-              <p className="text-gray-600 text-sm">Automatically highlights important concepts and key answers for better understanding</p>
+          <div className="grid md:grid-cols-3 gap-4 md:gap-6">
+            <div className="text-center p-4 md:p-6 bg-white rounded-lg shadow-sm">
+              <Key className="h-8 w-8 md:h-10 md:w-10 text-blue-600 mx-auto mb-3 md:mb-4" />
+              <h3 className="text-base md:text-lg font-semibold mb-2">Key Insights</h3>
+              <p className="text-gray-600 text-xs md:text-sm leading-relaxed">Automatically highlights important concepts and key answers for better understanding</p>
             </div>
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <Target className="h-10 w-10 text-green-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Structured Format</h3>
-              <p className="text-gray-600 text-sm">Follows Anna University exam patterns with proper formatting and organization</p>
+            <div className="text-center p-4 md:p-6 bg-white rounded-lg shadow-sm">
+              <Target className="h-8 w-8 md:h-10 md:w-10 text-green-600 mx-auto mb-3 md:mb-4" />
+              <h3 className="text-base md:text-lg font-semibold mb-2">Structured Format</h3>
+              <p className="text-gray-600 text-xs md:text-sm leading-relaxed">Follows Anna University exam patterns with proper formatting and organization</p>
             </div>
-            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
-              <Send className="h-10 w-10 text-purple-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">Instant Results</h3>
-              <p className="text-gray-600 text-sm">Generate comprehensive answers in seconds with AI-powered technology</p>
+            <div className="text-center p-4 md:p-6 bg-white rounded-lg shadow-sm">
+              <Send className="h-8 w-8 md:h-10 md:w-10 text-purple-600 mx-auto mb-3 md:mb-4" />
+              <h3 className="text-base md:text-lg font-semibold mb-2">Instant Results</h3>
+              <p className="text-gray-600 text-xs md:text-sm leading-relaxed">Generate comprehensive answers in seconds with AI-powered technology</p>
             </div>
           </div>
         </div>
       </section>
+
+      {/* Mobile Ad Section - Bottom */}
+      <div className="block md:hidden bg-gray-50 border-t border-gray-200 py-3 px-4">
+        <div className="text-center">
+          <p className="text-xs text-gray-500 mb-2">Advertisement</p>
+          <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-lg">
+            <p className="text-sm font-medium text-gray-700">Mobile Ad Space</p>
+            <p className="text-xs text-gray-500">320x100 Banner</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
