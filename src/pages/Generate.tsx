@@ -1,17 +1,18 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Loader2, Send, Copy, RefreshCw, Clock } from "lucide-react";
+import { Loader2, Send, Copy, RefreshCw, Clock, Key, Target } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 
 // Rate limiting configuration
 const RATE_LIMITS = {
   REQUESTS_PER_MINUTE: 28,
-  TOKENS_PER_MINUTE: 60000,
+  TOKENS_PER_MINUTE: 80000, // Updated to 80,000
   REQUESTS_PER_DAY: 1400,
   COOLDOWN_SECONDS: 15
 };
@@ -327,13 +328,24 @@ Answer:`;
     setMarkType("");
   };
 
-  // Function to format text with bold markers
+  // Function to format text with bold markers and highlight key answers
   const formatText = (text: string) => {
     return text.split(/(\*\*[^*]+\*\*)/).map((part, index) => {
       if (part.startsWith('**') && part.endsWith('**')) {
+        const content = part.slice(2, -2);
+        // Check if this is a key answer or important point
+        const isKeyAnswer = content.toLowerCase().includes('key') || 
+                           content.toLowerCase().includes('important') ||
+                           content.toLowerCase().includes('essential') ||
+                           content.toLowerCase().includes('critical');
+        
         return (
-          <strong key={index} className="font-semibold text-gray-900">
-            {part.slice(2, -2)}
+          <strong 
+            key={index} 
+            className={`font-semibold ${isKeyAnswer ? 'text-blue-700 bg-blue-50 px-1 rounded' : 'text-gray-900'}`}
+          >
+            {isKeyAnswer && <Key className="inline w-3 h-3 mr-1" />}
+            {content}
           </strong>
         );
       }
@@ -345,126 +357,177 @@ Answer:`;
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
       <Header />
       
-      <div className="pt-24 pb-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-6 sm:mb-8">
-            <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
-              Answer Generator
-            </h1>
-            <p className="text-base sm:text-lg text-gray-600 px-4">
-              Generate perfect answers for Anna University questions
-            </p>
-            {/* Rate limit status */}
-            <div className="mt-2 text-xs text-gray-500">
-              Requests today: {rateLimitState.requestsToday}/{RATE_LIMITS.REQUESTS_PER_DAY} | 
-              This minute: {rateLimitState.requestsThisMinute}/{RATE_LIMITS.REQUESTS_PER_MINUTE}
+      {/* Hero Section */}
+      <section className="pt-24 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto text-center">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-4">
+            AI Answer Generator
+          </h1>
+          <p className="text-base sm:text-lg lg:text-xl text-gray-600 px-4 max-w-3xl mx-auto">
+            Generate perfect, well-structured answers for Anna University questions with AI-powered insights
+          </p>
+          
+          {/* Enhanced Rate limit status */}
+          <div className="mt-4 flex flex-wrap justify-center gap-4 text-xs sm:text-sm text-gray-500">
+            <div className="bg-white px-3 py-1 rounded-full shadow-sm">
+              <Target className="inline w-4 h-4 mr-1" />
+              Daily: {rateLimitState.requestsToday}/{RATE_LIMITS.REQUESTS_PER_DAY}
+            </div>
+            <div className="bg-white px-3 py-1 rounded-full shadow-sm">
+              Per minute: {rateLimitState.requestsThisMinute}/{RATE_LIMITS.REQUESTS_PER_MINUTE}
+            </div>
+            <div className="bg-white px-3 py-1 rounded-full shadow-sm">
+              Tokens today: {rateLimitState.tokensThisMinute.toLocaleString()}/80,000
             </div>
           </div>
+        </div>
+      </section>
 
+      {/* Main Content Section */}
+      <section className="pb-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
+            
             {/* Input Section */}
-            <Card className="p-4 sm:p-6 shadow-lg border-0 bg-white order-2 lg:order-1">
-              <CardContent className="p-0">
-                <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6 text-gray-900">Question Input</h2>
-                
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Question Type
-                    </label>
-                    <Select value={markType} onValueChange={setMarkType}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select question type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="2-mark">2 Marks</SelectItem>
-                        <SelectItem value="13-mark">13 Marks</SelectItem>
-                        <SelectItem value="15-mark">15 Marks</SelectItem>
-                      </SelectContent>
-                    </Select>
+            <div className="order-2 lg:order-1">
+              <Card className="p-4 sm:p-6 shadow-lg border-0 bg-white">
+                <CardContent className="p-0">
+                  <div className="flex items-center mb-4 sm:mb-6">
+                    <Send className="h-6 w-6 text-blue-600 mr-2" />
+                    <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Question Input</h2>
                   </div>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Question Type
+                      </label>
+                      <Select value={markType} onValueChange={setMarkType}>
+                        <SelectTrigger className="w-full h-12">
+                          <SelectValue placeholder="Select question type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="2-mark">2 Marks - Quick Answer</SelectItem>
+                          <SelectItem value="13-mark">13 Marks - Detailed</SelectItem>
+                          <SelectItem value="15-mark">15 Marks - Comprehensive</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Your Question
-                    </label>
-                    <Textarea
-                      placeholder="Enter your Anna University question here..."
-                      value={question}
-                      onChange={(e) => setQuestion(e.target.value)}
-                      className="min-h-[100px] sm:min-h-[120px] w-full"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Your Question
+                      </label>
+                      <Textarea
+                        placeholder="Enter your Anna University question here..."
+                        value={question}
+                        onChange={(e) => setQuestion(e.target.value)}
+                        className="min-h-[120px] sm:min-h-[140px] w-full text-base"
+                      />
+                    </div>
 
-                  <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
-                    <Button 
-                      onClick={generateAnswer}
-                      disabled={isLoading || cooldownSeconds > 0}
-                      className="flex-1 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-                    >
-                      {isLoading ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Generating...
-                        </>
-                      ) : cooldownSeconds > 0 ? (
-                        <>
-                          <Clock className="mr-2 h-4 w-4" />
-                          Wait {cooldownSeconds}s
-                        </>
-                      ) : (
-                        <>
-                          <Send className="mr-2 h-4 w-4" />
-                          Generate Answer
-                        </>
-                      )}
-                    </Button>
-                    
-                    <Button variant="outline" onClick={clearAll} className="sm:w-auto">
-                      <RefreshCw className="mr-2 h-4 w-4" />
-                      Clear
-                    </Button>
+                    <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3">
+                      <Button 
+                        onClick={generateAnswer}
+                        disabled={isLoading || cooldownSeconds > 0}
+                        className="flex-1 h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-base"
+                      >
+                        {isLoading ? (
+                          <>
+                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                            Generating...
+                          </>
+                        ) : cooldownSeconds > 0 ? (
+                          <>
+                            <Clock className="mr-2 h-5 w-5" />
+                            Wait {cooldownSeconds}s
+                          </>
+                        ) : (
+                          <>
+                            <Send className="mr-2 h-5 w-5" />
+                            Generate Answer
+                          </>
+                        )}
+                      </Button>
+                      
+                      <Button variant="outline" onClick={clearAll} className="sm:w-auto h-12">
+                        <RefreshCw className="mr-2 h-5 w-5" />
+                        Clear
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            </div>
 
             {/* Answer Section */}
-            <Card className="p-4 sm:p-6 shadow-lg border-0 bg-white order-1 lg:order-2">
-              <CardContent className="p-0">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Generated Answer</h2>
-                  {answer && (
-                    <Button variant="outline" size="sm" onClick={copyToClipboard} className="self-start sm:self-auto">
-                      <Copy className="mr-2 h-4 w-4" />
-                      Copy
-                    </Button>
-                  )}
-                </div>
-                
-                <div className="h-[300px] sm:h-[400px] p-3 sm:p-4 bg-gray-50 rounded-lg border">
-                  {answer ? (
-                    <ScrollArea className="h-full w-full">
-                      <div className="prose prose-sm max-w-none pr-4">
-                        <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify text-sm sm:text-base">
-                          {formatText(answer)}
+            <div className="order-1 lg:order-2">
+              <Card className="p-4 sm:p-6 shadow-lg border-0 bg-white">
+                <CardContent className="p-0">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 sm:mb-6 space-y-2 sm:space-y-0">
+                    <div className="flex items-center">
+                      <Target className="h-6 w-6 text-green-600 mr-2" />
+                      <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">Generated Answer</h2>
+                    </div>
+                    {answer && (
+                      <Button variant="outline" size="sm" onClick={copyToClipboard} className="self-start sm:self-auto">
+                        <Copy className="mr-2 h-4 w-4" />
+                        Copy
+                      </Button>
+                    )}
+                  </div>
+                  
+                  <div className="h-[350px] sm:h-[450px] p-4 sm:p-6 bg-gray-50 rounded-lg border">
+                    {answer ? (
+                      <ScrollArea className="h-full w-full">
+                        <div className="prose prose-sm max-w-none pr-4">
+                          <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify text-sm sm:text-base">
+                            {formatText(answer)}
+                          </div>
+                        </div>
+                      </ScrollArea>
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-gray-400">
+                        <div className="text-center px-4">
+                          <Target className="h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-4 opacity-50" />
+                          <p className="text-sm sm:text-base font-medium mb-2">Your AI-generated answer will appear here</p>
+                          <p className="text-xs sm:text-sm">Complete with key insights and important points highlighted</p>
                         </div>
                       </div>
-                    </ScrollArea>
-                  ) : (
-                    <div className="flex items-center justify-center h-full text-gray-400">
-                      <div className="text-center px-4">
-                        <Send className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-4 opacity-50" />
-                        <p className="text-sm sm:text-base">Your generated answer will appear here</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-12 px-4 sm:px-6 lg:px-8 bg-white/50">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center text-gray-900 mb-8">
+            Why Choose Our AI Generator?
+          </h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
+              <Key className="h-10 w-10 text-blue-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Key Insights</h3>
+              <p className="text-gray-600 text-sm">Automatically highlights important concepts and key answers for better understanding</p>
+            </div>
+            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
+              <Target className="h-10 w-10 text-green-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Structured Format</h3>
+              <p className="text-gray-600 text-sm">Follows Anna University exam patterns with proper formatting and organization</p>
+            </div>
+            <div className="text-center p-6 bg-white rounded-lg shadow-sm">
+              <Send className="h-10 w-10 text-purple-600 mx-auto mb-4" />
+              <h3 className="text-lg font-semibold mb-2">Instant Results</h3>
+              <p className="text-gray-600 text-sm">Generate comprehensive answers in seconds with AI-powered technology</p>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };
