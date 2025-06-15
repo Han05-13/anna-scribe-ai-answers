@@ -207,7 +207,7 @@ const Generate = () => {
     try {
       const prompt = generatePrompt(question, markType);
       
-      // Set maxOutputTokens based on mark type
+      // Set maxOutputTokens based on mark type - always 1500 for 15-mark
       let maxTokens = 1024;
       if (markType === "15-mark") {
         maxTokens = 1500;
@@ -352,7 +352,7 @@ Answer:`;
         return (
           <strong 
             key={index} 
-            className={`font-semibold ${isKeyAnswer ? 'text-blue-700 bg-blue-50 px-1 rounded' : 'text-gray-900'}`}
+            className={`font-bold text-gray-900 ${isKeyAnswer ? 'text-purple-700 bg-purple-50 px-1 rounded' : ''}`}
           >
             {isKeyAnswer && <Key className="inline w-3 h-3 mr-1" />}
             {content}
@@ -364,16 +364,16 @@ Answer:`;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-violet-50">
       <Header />
       
       {/* Mobile Ad Section - Top */}
       <div className="block md:hidden bg-gray-100 border-y border-gray-200 py-2 px-4">
         <div className="bg-white rounded-lg p-3 text-center shadow-sm">
-          <p className="text-xs text-gray-500 mb-1">Advertisement</p>
-          <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-4 rounded">
-            <p className="text-sm font-medium text-gray-700">Mobile Ad Space</p>
-            <p className="text-xs text-gray-500">320x100 Banner</p>
+          <p className="text-xs text-gray-500 mb-1 font-medium">Advertisement</p>
+          <div className="bg-gradient-to-r from-purple-100 to-violet-100 p-4 rounded">
+            <p className="text-sm font-bold text-gray-700">Mobile Ad Space</p>
+            <p className="text-xs text-gray-500 font-medium">320x100 Banner</p>
           </div>
         </div>
       </div>
@@ -381,10 +381,10 @@ Answer:`;
       {/* Hero Section */}
       <section className="pt-16 md:pt-24 pb-6 md:pb-8 px-3 sm:px-4 md:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent mb-3 md:mb-4 leading-tight">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-purple-600 to-violet-600 bg-clip-text text-transparent mb-3 md:mb-4 leading-tight">
             AI Answer Generator
           </h1>
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 px-2 md:px-4 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 px-2 md:px-4 max-w-3xl mx-auto leading-relaxed font-medium">
             Generate perfect, well-structured answers for Anna University questions with AI-powered insights
           </p>
           
@@ -392,13 +392,13 @@ Answer:`;
           <div className="mt-3 md:mt-4 flex flex-wrap justify-center gap-2 md:gap-4 text-xs text-gray-500">
             <div className="bg-white px-2 py-1 rounded-full shadow-sm border">
               <Target className="inline w-3 h-3 mr-1" />
-              Daily: {rateLimitState.requestsToday}/{RATE_LIMITS.REQUESTS_PER_DAY}
+              <span className="font-bold">Daily:</span> {rateLimitState.requestsToday}/{RATE_LIMITS.REQUESTS_PER_DAY}
             </div>
             <div className="bg-white px-2 py-1 rounded-full shadow-sm border">
-              Per min: {rateLimitState.requestsThisMinute}/{RATE_LIMITS.REQUESTS_PER_MINUTE}
+              <span className="font-bold">Per min:</span> {rateLimitState.requestsThisMinute}/{RATE_LIMITS.REQUESTS_PER_MINUTE}
             </div>
             <div className="bg-white px-2 py-1 rounded-full shadow-sm border">
-              Tokens: {rateLimitState.tokensThisMinute.toLocaleString()}/80K
+              <span className="font-bold">Tokens:</span> {rateLimitState.tokensThisMinute.toLocaleString()}/80K
             </div>
           </div>
         </div>
@@ -414,13 +414,13 @@ Answer:`;
               <Card className="p-3 sm:p-4 md:p-6 shadow-lg border-0 bg-white">
                 <CardContent className="p-0">
                   <div className="flex items-center mb-3 md:mb-6">
-                    <Send className="h-5 w-5 md:h-6 md:w-6 text-blue-600 mr-2" />
-                    <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">Question Input</h2>
+                    <Send className="h-5 w-5 md:h-6 md:w-6 text-purple-600 mr-2" />
+                    <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Question Input</h2>
                   </div>
                   
                   <div className="space-y-3 md:space-y-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-bold text-gray-700 mb-2">
                         Question Type
                       </label>
                       <Select value={markType} onValueChange={setMarkType}>
@@ -428,22 +428,22 @@ Answer:`;
                           <SelectValue placeholder="Select question type" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="2-mark">2 Marks - Quick Answer</SelectItem>
-                          <SelectItem value="13-mark">13 Marks - Detailed</SelectItem>
-                          <SelectItem value="15-mark">15 Marks - Comprehensive (1500 tokens)</SelectItem>
+                          <SelectItem value="2-mark" className="font-medium">2 Marks - Quick Answer</SelectItem>
+                          <SelectItem value="13-mark" className="font-medium">13 Marks - Detailed</SelectItem>
+                          <SelectItem value="15-mark" className="font-medium">15 Marks - Comprehensive (1500 tokens)</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <label className="block text-sm font-bold text-gray-700 mb-2">
                         Your Question
                       </label>
                       <Textarea
                         placeholder="Enter your Anna University question here..."
                         value={question}
                         onChange={(e) => setQuestion(e.target.value)}
-                        className="min-h-[100px] sm:min-h-[120px] md:min-h-[140px] w-full text-sm md:text-base"
+                        className="min-h-[100px] sm:min-h-[120px] md:min-h-[140px] w-full text-sm md:text-base font-medium"
                       />
                     </div>
 
@@ -451,27 +451,27 @@ Answer:`;
                       <Button 
                         onClick={generateAnswer}
                         disabled={isLoading || cooldownSeconds > 0}
-                        className="flex-1 h-10 md:h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-sm md:text-base"
+                        className="flex-1 h-10 md:h-12 bg-gradient-to-r from-purple-600 to-violet-600 hover:from-purple-700 hover:to-violet-700 text-sm md:text-base font-bold"
                       >
                         {isLoading ? (
                           <>
                             <Loader2 className="mr-2 h-4 w-4 md:h-5 md:w-5 animate-spin" />
-                            Generating...
+                            <span className="font-bold">Generating...</span>
                           </>
                         ) : cooldownSeconds > 0 ? (
                           <>
                             <Clock className="mr-2 h-4 w-4 md:h-5 md:w-5" />
-                            Wait {cooldownSeconds}s
+                            <span className="font-bold">Wait {cooldownSeconds}s</span>
                           </>
                         ) : (
                           <>
                             <Send className="mr-2 h-4 w-4 md:h-5 md:w-5" />
-                            Generate Answer
+                            <span className="font-bold">Generate Answer</span>
                           </>
                         )}
                       </Button>
                       
-                      <Button variant="outline" onClick={clearAll} className="sm:w-auto h-10 md:h-12 text-sm md:text-base">
+                      <Button variant="outline" onClick={clearAll} className="sm:w-auto h-10 md:h-12 text-sm md:text-base font-bold">
                         <RefreshCw className="mr-2 h-4 w-4 md:h-5 md:w-5" />
                         Clear
                       </Button>
@@ -487,11 +487,11 @@ Answer:`;
                 <CardContent className="p-0">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-3 md:mb-6 space-y-2 sm:space-y-0">
                     <div className="flex items-center">
-                      <Target className="h-5 w-5 md:h-6 md:w-6 text-green-600 mr-2" />
-                      <h2 className="text-lg sm:text-xl md:text-2xl font-semibold text-gray-900">Generated Answer</h2>
+                      <Target className="h-5 w-5 md:h-6 md:w-6 text-purple-600 mr-2" />
+                      <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900">Generated Answer</h2>
                     </div>
                     {answer && (
-                      <Button variant="outline" size="sm" onClick={copyToClipboard} className="self-start sm:self-auto text-xs md:text-sm">
+                      <Button variant="outline" size="sm" onClick={copyToClipboard} className="self-start sm:self-auto text-xs md:text-sm font-bold">
                         <Copy className="mr-2 h-3 w-3 md:h-4 md:w-4" />
                         Copy
                       </Button>
@@ -502,7 +502,7 @@ Answer:`;
                     {answer ? (
                       <ScrollArea className="h-full w-full">
                         <div className="prose prose-sm max-w-none pr-2 md:pr-4">
-                          <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify text-xs sm:text-sm md:text-base">
+                          <div className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-justify text-xs sm:text-sm md:text-base font-medium">
                             {formatText(answer)}
                           </div>
                         </div>
@@ -511,8 +511,8 @@ Answer:`;
                       <div className="flex items-center justify-center h-full text-gray-400">
                         <div className="text-center px-2 md:px-4">
                           <Target className="h-10 w-10 sm:h-12 sm:w-12 md:h-16 md:w-16 mx-auto mb-3 md:mb-4 opacity-50" />
-                          <p className="text-xs sm:text-sm md:text-base font-medium mb-2">Your AI-generated answer will appear here</p>
-                          <p className="text-xs text-gray-500">Complete with key insights and important points highlighted</p>
+                          <p className="text-xs sm:text-sm md:text-base font-bold mb-2">Your AI-generated answer will appear here</p>
+                          <p className="text-xs text-gray-500 font-medium">Complete with key insights and important points highlighted</p>
                         </div>
                       </div>
                     )}
@@ -527,10 +527,10 @@ Answer:`;
       {/* Mobile Ad Section - Middle */}
       <div className="block md:hidden bg-white border-y border-gray-200 py-3 px-4 mb-6">
         <div className="text-center">
-          <p className="text-xs text-gray-500 mb-2">Advertisement</p>
-          <div className="bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-lg">
-            <p className="text-sm font-medium text-gray-700">Mobile Ad Space</p>
-            <p className="text-xs text-gray-500">320x250 Medium Rectangle</p>
+          <p className="text-xs text-gray-500 mb-2 font-medium">Advertisement</p>
+          <div className="bg-gradient-to-r from-purple-100 to-violet-100 p-6 rounded-lg">
+            <p className="text-sm font-bold text-gray-700">Mobile Ad Space</p>
+            <p className="text-xs text-gray-500 font-medium">320x250 Medium Rectangle</p>
           </div>
         </div>
       </div>
@@ -543,19 +543,19 @@ Answer:`;
           </h2>
           <div className="grid md:grid-cols-3 gap-4 md:gap-6">
             <div className="text-center p-4 md:p-6 bg-white rounded-lg shadow-sm">
-              <Key className="h-8 w-8 md:h-10 md:w-10 text-blue-600 mx-auto mb-3 md:mb-4" />
-              <h3 className="text-base md:text-lg font-semibold mb-2">Key Insights</h3>
-              <p className="text-gray-600 text-xs md:text-sm leading-relaxed">Automatically highlights important concepts and key answers for better understanding</p>
+              <Key className="h-8 w-8 md:h-10 md:w-10 text-purple-600 mx-auto mb-3 md:mb-4" />
+              <h3 className="text-base md:text-lg font-bold mb-2">Key Insights</h3>
+              <p className="text-gray-600 text-xs md:text-sm leading-relaxed font-medium">Automatically highlights important concepts and key answers for better understanding</p>
             </div>
             <div className="text-center p-4 md:p-6 bg-white rounded-lg shadow-sm">
-              <Target className="h-8 w-8 md:h-10 md:w-10 text-green-600 mx-auto mb-3 md:mb-4" />
-              <h3 className="text-base md:text-lg font-semibold mb-2">Structured Format</h3>
-              <p className="text-gray-600 text-xs md:text-sm leading-relaxed">Follows Anna University exam patterns with proper formatting and organization</p>
+              <Target className="h-8 w-8 md:h-10 md:w-10 text-purple-600 mx-auto mb-3 md:mb-4" />
+              <h3 className="text-base md:text-lg font-bold mb-2">Structured Format</h3>
+              <p className="text-gray-600 text-xs md:text-sm leading-relaxed font-medium">Follows Anna University exam patterns with proper formatting and organization</p>
             </div>
             <div className="text-center p-4 md:p-6 bg-white rounded-lg shadow-sm">
               <Send className="h-8 w-8 md:h-10 md:w-10 text-purple-600 mx-auto mb-3 md:mb-4" />
-              <h3 className="text-base md:text-lg font-semibold mb-2">Instant Results</h3>
-              <p className="text-gray-600 text-xs md:text-sm leading-relaxed">Generate comprehensive answers in seconds with AI-powered technology</p>
+              <h3 className="text-base md:text-lg font-bold mb-2">Instant Results</h3>
+              <p className="text-gray-600 text-xs md:text-sm leading-relaxed font-medium">Generate comprehensive answers in seconds with AI-powered technology</p>
             </div>
           </div>
         </div>
@@ -564,10 +564,10 @@ Answer:`;
       {/* Mobile Ad Section - Bottom */}
       <div className="block md:hidden bg-gray-50 border-t border-gray-200 py-3 px-4">
         <div className="text-center">
-          <p className="text-xs text-gray-500 mb-2">Advertisement</p>
+          <p className="text-xs text-gray-500 mb-2 font-medium">Advertisement</p>
           <div className="bg-gradient-to-r from-purple-100 to-pink-100 p-4 rounded-lg">
-            <p className="text-sm font-medium text-gray-700">Mobile Ad Space</p>
-            <p className="text-xs text-gray-500">320x100 Banner</p>
+            <p className="text-sm font-bold text-gray-700">Mobile Ad Space</p>
+            <p className="text-xs text-gray-500 font-medium">320x100 Banner</p>
           </div>
         </div>
       </div>
