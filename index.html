@@ -1,28 +1,423 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StuBud AI - Anna University Answer Generator</title>
-    <meta name="description" content="AI-powered answer generation for Anna University questions. Generate perfect 2-mark, 13-mark, and 15-mark answers using Gemini 2.0 Flash AI." />
-    <meta name="author" content="StuBud AI" />
-    <meta name="keywords" content="Anna University, AI answers, exam preparation, study guide, academic help, Gemini AI" />
+    <meta name="description" content="AI-powered answer generation for Anna University questions. Generate perfect 2-mark, 13-mark, and 15-mark answers using Gemini 2.0 Flash AI.">
+    <meta name="author" content="StuBud AI">
+    <meta name="keywords" content="Anna University, AI answers, exam preparation, study guide, academic help, Gemini AI">
+    
+    <meta property="og:title" content="StuBud AI - Anna University Answer Generator">
+    <meta property="og:description" content="AI-powered answer generation for Anna University questions. Generate perfect answers for 2, 13, and 15-mark questions.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@stubudai">
+    <meta name="twitter:title" content="StuBud AI - Anna University Answer Generator">
+    <meta name="twitter:description" content="AI-powered answer generation for Anna University questions">
+    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png">
+    
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <span class="logo-text">StuBud AI</span>
+                </a>
+                
+                <nav class="nav desktop-nav">
+                    <a href="#home" class="nav-link">Home</a>
+                    <a href="#generate" class="nav-link">Generate</a>
+                    <a href="#about" class="nav-link">About</a>
+                    <a href="#contact" class="nav-link">Contact</a>
+                </nav>
+                
+                <div class="nav-actions desktop-nav">
+                    <button class="btn btn-primary" onclick="showSection('generate')">Get Started</button>
+                </div>
+                
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <i data-lucide="menu"></i>
+                </button>
+            </div>
+            
+            <nav class="mobile-nav" id="mobileNav">
+                <a href="#home" class="nav-link" onclick="showSection('home')">Home</a>
+                <a href="#generate" class="nav-link" onclick="showSection('generate')">Generate</a>
+                <a href="#about" class="nav-link" onclick="showSection('about')">About</a>
+                <a href="#contact" class="nav-link" onclick="showSection('contact')">Contact</a>
+                <button class="btn btn-primary" onclick="showSection('generate')">Get Started</button>
+            </nav>
+        </div>
+    </header>
 
-    <meta property="og:title" content="StuBud AI - Anna University Answer Generator" />
-    <meta property="og:description" content="AI-powered answer generation for Anna University questions. Generate perfect answers for 2, 13, and 15-mark questions." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="container">
+                    <h1 class="hero-title">StuBud AI</h1>
+                    <p class="hero-subtitle">Generate Perfect Answers for Anna University Questions</p>
+                    <p class="hero-description">
+                        Get structured, comprehensive answers for 2-mark, 13-mark, and 15-mark questions 
+                        tailored specifically for Anna University exam patterns.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary btn-lg" onclick="showSection('generate')">
+                            Start Generating Answers
+                            <i data-lucide="arrow-right"></i>
+                        </button>
+                        <button class="btn btn-outline btn-lg" onclick="showSection('about')">
+                            <i data-lucide="book-open"></i>
+                            Learn More
+                        </button>
+                    </div>
+                </div>
+            </div>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@stubudai" />
-    <meta name="twitter:title" content="StuBud AI - Anna University Answer Generator" />
-    <meta name="twitter:description" content="AI-powered answer generation for Anna University questions" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+            <!-- Features Section -->
+            <div class="features">
+                <div class="container">
+                    <div class="section-header">
+                        <h2>Why Choose StuBud AI?</h2>
+                        <p>Designed specifically for Anna University students with AI-powered precision</p>
+                    </div>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon blue">
+                                <i data-lucide="book-open"></i>
+                            </div>
+                            <h3>2-Mark Questions</h3>
+                            <p>Concise, precise answers perfect for short-answer questions with key points highlighted.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon purple">
+                                <i data-lucide="lightbulb"></i>
+                            </div>
+                            <h3>13-Mark Questions</h3>
+                            <p>Detailed explanations with examples, diagrams suggestions, and structured formatting.</p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon indigo">
+                                <i data-lucide="graduation-cap"></i>
+                            </div>
+                            <h3>15-Mark Questions</h3>
+                            <p>Comprehensive answers with in-depth analysis, multiple approaches, and exam strategies.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+            <!-- Stats Section -->
+            <div class="stats">
+                <div class="container">
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value">
+                                <i data-lucide="users"></i>
+                                <span>10K+</span>
+                            </div>
+                            <p>Students Helped</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">
+                                <i data-lucide="book-open"></i>
+                                <span>50K+</span>
+                            </div>
+                            <p>Answers Generated</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">
+                                <i data-lucide="trophy"></i>
+                                <span>95%</span>
+                            </div>
+                            <p>Success Rate</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta">
+                <div class="container">
+                    <h2>Ready to Ace Your Anna University Exams?</h2>
+                    <p>Join thousands of students who are already using StuBud AI to generate perfect answers and improve their exam performance.</p>
+                    <button class="btn btn-primary btn-lg" onclick="showSection('generate')">
+                        Get Started Now
+                        <i data-lucide="arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generate Section -->
+        <section id="generate" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>Answer Generator</h1>
+                    <p>Generate perfect answers for Anna University questions</p>
+                    <div id="rateLimitStatus" class="rate-limit-status"></div>
+                </div>
+                
+                <div class="generate-grid">
+                    <!-- Input Section -->
+                    <div class="card">
+                        <h2>Question Input</h2>
+                        <div class="form-group">
+                            <label for="markType">Question Type</label>
+                            <select id="markType" class="form-control">
+                                <option value="">Select question type</option>
+                                <option value="2-mark">2 Marks</option>
+                                <option value="13-mark">13 Marks</option>
+                                <option value="15-mark">15 Marks</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="question">Your Question</label>
+                            <textarea id="question" class="form-control" placeholder="Enter your Anna University question here..." rows="6"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button id="generateBtn" class="btn btn-primary" onclick="generateAnswer()">
+                                <i data-lucide="send"></i>
+                                Generate Answer
+                            </button>
+                            <button class="btn btn-outline" onclick="clearAll()">
+                                <i data-lucide="refresh-cw"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Answer Section -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Generated Answer</h2>
+                            <button id="copyBtn" class="btn btn-outline btn-sm" onclick="copyAnswer()" style="display: none;">
+                                <i data-lucide="copy"></i>
+                                Copy
+                            </button>
+                        </div>
+                        <div class="answer-container">
+                            <div id="answerPlaceholder" class="answer-placeholder">
+                                <i data-lucide="send"></i>
+                                <p>Your generated answer will appear here</p>
+                            </div>
+                            <div id="answerContent" class="answer-content" style="display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>About StuBud AI</h1>
+                    <p>Empowering Anna University students with AI-driven academic excellence</p>
+                </div>
+                
+                <div class="about-content">
+                    <div class="card">
+                        <div class="card-header">
+                            <i data-lucide="target"></i>
+                            <h2>Our Mission</h2>
+                        </div>
+                        <p>StuBud AI is dedicated to revolutionizing the way Anna University students prepare for their examinations. We leverage cutting-edge artificial intelligence technology, specifically Google's Gemini 2.0 Flash model, to generate comprehensive, accurate, and well-structured answers for various question formats.</p>
+                        <p>Our platform is designed to help students understand complex concepts, improve their writing skills, and achieve academic success by providing them with high-quality reference answers that follow Anna University's examination patterns and standards.</p>
+                    </div>
+
+                    <div class="about-grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <i data-lucide="users"></i>
+                                <h3>For Students</h3>
+                            </div>
+                            <p>We understand the challenges faced by Anna University students in preparing comprehensive answers within time constraints. Our AI-powered solution provides instant, well-structured responses that serve as excellent study references.</p>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <i data-lucide="lightbulb"></i>
+                                <h3>AI Technology</h3>
+                            </div>
+                            <p>Powered by Google's advanced Gemini 2.0 Flash model, our platform ensures accurate, contextually relevant answers that align with academic standards and examination requirements specific to Anna University curriculum.</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <i data-lucide="graduation-cap"></i>
+                            <h2>What We Offer</h2>
+                        </div>
+                        <div class="offerings">
+                            <div class="offering">
+                                <h3>2-Mark Questions</h3>
+                                <p>Concise, precise answers perfect for short-answer questions with key concepts clearly highlighted.</p>
+                            </div>
+                            <div class="offering">
+                                <h3>13-Mark Questions</h3>
+                                <p>Detailed explanations with examples, structured formatting, and comprehensive coverage of topics.</p>
+                            </div>
+                            <div class="offering">
+                                <h3>15-Mark Questions</h3>
+                                <p>In-depth analysis with multiple approaches, real-world applications, and examination strategies.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h1>Contact Us</h1>
+                    <p>Have questions? We're here to help you succeed</p>
+                </div>
+                
+                <div class="contact-grid">
+                    <div class="contact-info">
+                        <div class="card">
+                            <div class="card-header">
+                                <i data-lucide="mail"></i>
+                                <h3>Email Support</h3>
+                            </div>
+                            <p>Get help with technical issues</p>
+                            <a href="mailto:support@stubudai.com">support@stubudai.com</a>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <i data-lucide="message-square"></i>
+                                <h3>General Inquiries</h3>
+                            </div>
+                            <p>Questions about our service</p>
+                            <a href="mailto:info@stubudai.com">info@stubudai.com</a>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <i data-lucide="clock"></i>
+                                <h3>Response Time</h3>
+                            </div>
+                            <p>We typically respond within 24 hours during business days</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Send us a Message</h2>
+                        <form id="contactForm" onsubmit="submitContact(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="contactName">Full Name</label>
+                                    <input type="text" id="contactName" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactEmail">Email Address</label>
+                                    <input type="email" id="contactEmail" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactSubject">Subject</label>
+                                <input type="text" id="contactSubject" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contactMessage">Message</label>
+                                <textarea id="contactMessage" class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i data-lucide="send"></i>
+                                Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <div class="logo">
+                        <div class="logo-icon">
+                            <i data-lucide="graduation-cap"></i>
+                        </div>
+                        <span class="logo-text">StuBud AI</span>
+                    </div>
+                    <p>AI-powered answer generation for Anna University students. Generate perfect answers for 2, 13, and 15-mark questions.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Product</h3>
+                    <ul>
+                        <li><a href="#generate" onclick="showSection('generate')">Answer Generator</a></li>
+                        <li><a href="#about" onclick="showSection('about')">About Us</a></li>
+                        <li><a href="#contact" onclick="showSection('contact')">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms & Conditions</a></li>
+                        <li><a href="#disclaimer">Disclaimer</a></li>
+                        <li><a href="#copyright">Copyright Notice</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul>
+                        <li><a href="mailto:support@stubudai.com">support@stubudai.com</a></li>
+                        <li><span>Available 24/7</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 StuBud AI. All rights reserved. | Made for Anna University students with ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Cookie Consent -->
+    <div id="cookieConsent" class="cookie-consent" style="display: none;">
+        <div class="cookie-card">
+            <div class="cookie-content">
+                <i data-lucide="cookie"></i>
+                <div class="cookie-text">
+                    <h3>Cookie Consent</h3>
+                    <p>We use cookies to enhance your experience, including analytics and advertising cookies from Google AdSense/DoubleClick. By continuing, you consent to our use of cookies as described in our Privacy Policy.</p>
+                    <div class="cookie-actions">
+                        <button class="btn btn-primary btn-sm" onclick="acceptCookies()">Accept All</button>
+                        <button class="btn btn-outline btn-sm" onclick="declineCookies()">Decline</button>
+                    </div>
+                </div>
+                <button class="cookie-close" onclick="declineCookies()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+</body>
 </html>
